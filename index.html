@@ -7,9 +7,19 @@
     </head>
     <body>
 
-        <div class="alert-box" id = "alert">알림창임</div>
-        <button onclick="document.getElementById('alert').style.display = 'block';">버튼</button>
-        <button onclick="document.getElementById('alert').style.display = 'none';">닫기</button>
+        <div class="alert-box" id = "alert">알림창임
+        <button onclick="set_Button('none');">닫기</button>
+        </div>
+        <button onclick="set_Button('block');;">버튼</button>
+        
+        <script>
+
+            function set_Button_forAlert(s)
+            {
+                document.getElementById('alert').style.display = s;
+            }
+
+        </script>
 
     </body>
 </html>
