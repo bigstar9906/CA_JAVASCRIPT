@@ -1,35 +1,60 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Document</title>
-        <link rel = "stylesheet" href = "main.css">
-    </head>
-    <body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <div class="alert-box" id = "alert">
-            <button onclick="set_Button_forAlert('none');" id = "exit">닫기</button>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href = "main.css" rel = "stylesheet">
+    <title>JS</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    
+  </head>
+  <body>
+    <div class="black-bg">
+      <div class="white-bg">
+        <h4>로그인하세요</h4>
+        <button class="btn btn-danger" id="close">닫기</button>
+      </div>
+    </div> 
+
+
+    <h1>Hello, world!</h1>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <button type="button" class="btn btn-primary">Primary</button>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+          <span class="navbar-brand">Navbar</span>
+          <button class="navbar-toggler" type="button">
+            <span class="navbar-toggler-icon"></span>
+          </button>
         </div>
-        
-        <button onclick="set_Button_forAlert('block');set_ButtonText_forAlert('아이디 입력하세요');">버튼1</button>
-        <button onclick="set_Button_forAlert('block');set_ButtonText_forAlert('비밀번호 입력하세요');">버튼2</button>
-        
-        <script>
+      </nav>
+      
+     
+     
+   
+      <ul class="list-group ">
+        <li class="list-group-item">An item</li>
+        <li class="list-group-item">A second item</li>
+        <li class="list-group-item">A third item</li>
+        <li class="list-group-item">A fourth item</li>
+        <li class="list-group-item">And a fifth one</li>
+      </ul>
+      <p class = "hello">안녕</p>
+      <p class = "hello">안녕</p>
+      <p class = "hello">안녕</p>
+      <button id="test-btn">버튼</button>
 
-            function set_Button_forAlert(s)
-            {
-                document.getElementById('alert').style.display = s;
-            }
-            function set_ButtonText_forAlert(s)
-            {
-                var m = document.getElementById('exit');
-                document.getElementById('alert').innerHTML = s;
-                document.getElementById('alert').style.fontSize="20px";
-                document.getElementById('alert').insertAdjacentElement("beforeend",m);
-            }
-
-        </script>
-
-    </body>
+      <script>
+            $('.hello').html('바보');
+            $('#test-btn').on('click',function(){$('.black-bg').addClass('show');})
+            $('#close').on('click',function(){$('.black-bg').removeClass('show');})
+            document.querySelector('.navbar-toggler').addEventListener('click', function(){
+            document.querySelector('.list-group').classList.toggle('list-show');
+        })
+      </script>
+  </body>
 </html>
-
