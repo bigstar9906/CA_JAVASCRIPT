@@ -1,0 +1,38 @@
+:root{
+    scroll-behavior: auto;
+}
+.dark{
+    background-color:rgba(0,0,0,0.5);
+    color: white;
+}
+
+.light{
+    color: black;
+}
+
+
+
+.slide-container{
+    width: 700vw;
+    transition: all 1s;
+}
+
+.slide-box {
+    width: 100vw;
+    float: left;
+}
+
+.slide-box img {
+    width: 100%;
+}
+
+.navbar{
+    position: fixed;
+    width: 100%;
+    z-index: 5;
+}
+
+.navbar-brand{
+    font-size: 30px;
+    transition:all 1ms;
+}
