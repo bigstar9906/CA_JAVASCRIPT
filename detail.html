@@ -17,6 +17,60 @@
         integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
         crossorigin="anonymous"></script>
 
+        <div class="container mt-3">
+            <div class="card p-3">
+                상품명 / 가격
+            </div>
+        </div>
+
+        <form class="container my-5 form-group">
+            <p>상품선택</p>
+            <select class="form-select mt-2">
+              <option id="hat">모자</option>
+              <option id="shirt">셔츠</option>
+              <option id="pants">바지</option>
+            </select>
+            <select class="form-select mt-2 form-hide">
+                <option>95</option>
+                <option>100</option>
+                <option>105</option>
+                <option>110</option>
+              </select>
+        </form>
+
+        <script>
+            var shirts = [95,100,105,110];
+            var car2 = {name: '소나타',price:50000};
+            console.log(car2.name + '/' + car2.price);
+            $('.card').html( car2.name +' / '+ car2.price);
+            $('.form-select').eq(0).on('click',function(){
+                var s = document.querySelector('.form-select');
+                if(s.options[s.selectedIndex]==document.querySelector('#hat')) $('.form-select').eq(1).addClass('form-hide');
+                if(s.options[s.selectedIndex]==document.querySelector('#shirt'))
+                {
+                     $('.form-select').eq(1).removeClass('form-hide');
+                     $('.form-select').eq(1).html('');
+                     shirts.forEach(function(a){
+                        $('.form-select').eq(1).append('<option>'+a+'</option>');
+                     });             
+                }
+                if(s.options[s.selectedIndex]==document.querySelector('#pants'))
+                {
+                    $('.form-select').eq(1).removeClass('form-hide');
+                    $('.form-select').eq(1).html('');
+                    $('.form-select').eq(1).append('<option>28</option><option>30</option>');
+                }
+            });
+
+           for(let i=2;i<10;i++)
+           {
+            for(let j=1;j<10;j++)
+            {
+                console.log(i*j);
+            }
+           }
+        </script>
+
     <style>
         ul.list {
             list-style-type: none;
@@ -29,6 +83,10 @@
             content: '';
             display: block;
             clear: both;
+        }
+
+        .form-hide{
+            visibility: hidden;
         }
 
         .tab-button {

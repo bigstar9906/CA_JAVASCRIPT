@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="inst.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+
+<body class="">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+
+        <div class="container">
+            <div class="row">
+          
+                <!-- <div class="col-sm-4">
+                  <img src="https://via.placeholder.com/600" class="w-100">
+                  <h5>Card title</h5>
+                  <p>가격 : 70000</p>
+                </div> -->
+          
+            </div>
+          </div> 
+          <div class="container">
+          <button class="btn btn-danger" id="More_btn">더보기</button>
+        </div>
+       
+          <script>
+            var products = [
+              { id : 0, price : 70000, title : 'Blossom Dress' },
+              { id : 1, price : 50000, title : 'Springfield Shirt' },
+              { id : 2, price : 60000, title : 'Black Monastery' }
+            ];
+            products.forEach(function(data){
+                set_col_sm(data);
+            });
+            
+            var clicked =0;
+            $('#More_btn').click(function(){
+                clicked+=1;
+                $.get('https://codingapple1.github.io/js/more'+clicked+'.json').done(function(data){
+                    for(let i=0;i<data.length;i++)set_col_sm(data[i]);
+                });
+                if(clicked==2)
+                {
+                  $('#More_btn').css("visibility","hidden")
+                }
+            })
+           
+            function set_col_sm(a)
+            {
+                $('.row').append(` <div class="col-sm-4">
+                    <img src="https://via.placeholder.com/600" class="w-100">
+                    <h5>${a.title}</h5>
+                    <p>가격 : ${a.price}</p>
+                  </div>`);
+            }
+
+          </script>
+</body>
+
+</html>
