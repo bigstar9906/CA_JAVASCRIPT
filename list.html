@@ -30,6 +30,7 @@
           </div> 
           <div class="container">
           <button class="btn btn-danger" id="More_btn">더보기</button>
+          <button class="btn btn-primary" id="Price_sort">가격↓</button>
         </div>
        
           <script>
@@ -46,12 +47,45 @@
             $('#More_btn').click(function(){
                 clicked+=1;
                 $.get('https://codingapple1.github.io/js/more'+clicked+'.json').done(function(data){
-                    for(let i=0;i<data.length;i++)set_col_sm(data[i]);
+                    for(let i=0;i<data.length;i++)
+                    {
+                      products.push(data[i]);
+                      set_col_sm(data[i]);
+                    }
                 });
                 if(clicked==2)
                 {
-                  $('#More_btn').css("visibility","hidden")
+                  $('#More_btn').css("display","none")
                 }
+            })
+
+            var sort_clicked=0;
+            $('#Price_sort').click(function(){
+              sort_clicked+=1;
+              if(sort_clicked%2==1)
+              {
+                $('.row').html('');
+                products.sort(function(a,b){
+                  return a.price-b.price;
+                });
+                console.log(products);
+                products.forEach(function(data){
+                  set_col_sm(data);
+                })
+                $('#Price_sort').html('가격↑');
+              }
+              else
+              {
+                $('.row').html('');
+                products.sort(function(a,b){
+                  return b.price-a.price;
+                });
+                console.log(products);
+                products.forEach(function(data){
+                  set_col_sm(data);
+                })
+                $('#Price_sort').html('가격↓');
+              }
             })
            
             function set_col_sm(a)
