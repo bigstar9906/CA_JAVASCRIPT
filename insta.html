@@ -196,11 +196,26 @@
           $('.slide-container').css('transform','translateX('+current+'vw)');
         }
     </script>
-
+    <div id="quiz">
+    <h4>물에 빠지면 누구부터 구할 것인가?</h4>
+    <button>와이프</button>
+    <button>부모님</button>
+    <button>키우던 개</button>
+  </div>
+    <div style="height:300px"></div>
     <div class="lorem" style="width: 200px; height:100px;overflow-y:scroll">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae voluptas voluptatum minus praesentium fugit debitis at, laborum ipsa itaque placeat sit, excepturi eius. Nostrum perspiciatis, eligendi quae consectetur praesentium exercitationem.
     </div>
     <script>
+      document.querySelector('#quiz').addEventListener('click',function(e){
+        switch(e.target.innerHTML)
+        {
+          case '와이프': console.log('사랑꾼'); break;
+          case '부모님': console.log('효자'); break;
+          case '키우던 개': console.log('동물 애호가');break;
+        }
+
+      })
         var isEnd = 0;
         $('.lorem').on('scroll',function(){
            if(document.querySelector('.lorem').scrollTop+document.querySelector('.lorem').clientHeight+10>=document.querySelector('.lorem').scrollHeight&&isEnd==0)
