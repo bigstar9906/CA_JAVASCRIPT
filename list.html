@@ -31,7 +31,19 @@
           <div class="container">
           <button class="btn btn-danger" id="More_btn">더보기</button>
           <button class="btn btn-primary" id="Price_sort">가격↓</button>
+          <button class="btn btn-primary" id="ABC_sort">가나다↓</button>
+          <button class="btn btn-primary" id="Filter_sort">
+            <select id="price_selection">
+              <option>30000</option>
+              <option>40000</option>
+              <option>50000</option>
+              <option>60000</option>
+            </select>
+          원 이하 상품 보기</button>
+          <button class="btn btn-info" id="cart_page">장바구니</button>
         </div>
+
+        <form action="cart.html" id="page_shift"></form>
        
           <script>
             var products = [
@@ -41,8 +53,11 @@
             ];
             products.forEach(function(data){
                 set_col_sm(data);
+                
             });
             
+           
+
             var clicked =0;
             $('#More_btn').click(function(){
                 clicked+=1;
@@ -50,13 +65,21 @@
                     for(let i=0;i<data.length;i++)
                     {
                       products.push(data[i]);
-                      set_col_sm(data[i]);
                     }
+                    $('.row').html('');
+                    products.forEach(function(data){
+                    set_col_sm(data);
+                    
+                    });
                 });
                 if(clicked==2)
                 {
                   $('#More_btn').css("display","none")
                 }
+            })
+
+            $('#cart_page').click(function(){
+              $('#page_shift').submit();
             })
 
             var sort_clicked=0;
@@ -71,6 +94,7 @@
                 console.log(products);
                 products.forEach(function(data){
                   set_col_sm(data);
+                  
                 })
                 $('#Price_sort').html('가격↑');
               }
@@ -83,9 +107,79 @@
                 console.log(products);
                 products.forEach(function(data){
                   set_col_sm(data);
+                  
                 })
                 $('#Price_sort').html('가격↓');
               }
+            })
+
+            var abc_clicked=0;
+            $('#ABC_sort').click(function(){
+              abc_clicked+=1;
+              if(abc_clicked%2==1)
+              {
+                $('.row').html('');
+                products.sort(function(a,b){
+                  if(a.title<b.title) return-1;
+                  if(a.title>b.title) return 1;
+                  if(a.title==b.title) return 0;
+                });
+                console.log(products);
+                products.forEach(function(data){
+                  set_col_sm(data);
+                  
+                })
+                $('#ABC_sort').html('가나다↑');
+              }
+              else
+              {
+                $('.row').html('');
+                products.sort(function(a,b){
+                  if(a.title>b.title) return-1;
+                  if(a.title<b.title) return 1;
+                  if(a.title==b.title) return 0;
+                });
+                console.log(products);
+                products.forEach(function(data){
+                  set_col_sm(data);
+                  
+                })
+                $('#ABC_sort').html('가나다↓');
+              }
+            })
+
+            var filter_clicked=0;
+            $('#Filter_sort').click(function(e){
+              if(e.target!=document.querySelector('#price_selection'))
+              {
+              filter_clicked+=1;
+              var filtered_products = products.filter(function(a){
+                return a.price<=$('#price_selection').val();
+              })
+              if(filter_clicked%2==1)
+              {
+                $('.row').html('');
+                filtered_products.forEach(function(data){
+                  set_col_sm(data);
+                  
+                })
+                $('#Filter_sort').html('전체 상품 보기');
+              }
+              else
+              {
+                $('.row').html('');
+                products.forEach(function(data){
+                  set_col_sm(data);
+                  
+                })
+                $('#Filter_sort').html(`<select id="price_selection">
+                  <option>30000</option>
+                  <option>40000</option>
+                  <option>50000</option>
+                  <option>60000</option>
+                </select>원 이하 상품 보기`);
+              }
+            }
             })
            
             function set_col_sm(a)
@@ -94,8 +188,35 @@
                     <img src="https://via.placeholder.com/600" class="w-100">
                     <h5>${a.title}</h5>
                     <p>가격 : ${a.price}</p>
+                    <button class="buy">구매</button>
                   </div>`);
-            }
+                  for(let i=0;i<$('.buy').length;i++)
+                  {
+                    
+                    if($._data($('.buy')[i], 'events')==null)
+                    {
+                  $('.buy').eq(i).click(function(e){
+                    if(localStorage.getItem('cart'))
+                    {
+                      var cart = localStorage.getItem('cart');
+                      var selected_Product = JSON.parse(cart);
+                      selected_Product.push($(e.target).parent().children().eq(1).html());
+                      localStorage.setItem('cart',JSON.stringify(selected_Product));
+                    }
+                    else
+                    {
+                      var selected_Product = JSON.stringify([$(e.target).parent().children().eq(1).html()]);
+                      localStorage.setItem('cart',selected_Product);
+                    } 
+                  });
+                }
+                }
+            }     
+            
+           
+            
+           
+
 
           </script>
 </body>

@@ -41,6 +41,10 @@
   </nav>
 
   <script>
+
+    $('#close').click(function(){
+      $('.black-bg').removeClass('show');
+    })
     var click_cnt=0;
     $('#badge').on('click',function(){
       click_cnt++;
@@ -76,13 +80,13 @@
     <div style="overflow: hidden;">
     <div class="slide-container">
         <div class="slide-box">
-            <img src="car1.png">
+            <img src="car1.png" draggable="false">
         </div>
         <div class="slide-box">
-            <img src="car2.png">
+            <img src="car2.png" draggable="false">
         </div>
         <div class="slide-box">
-            <img src="car3.png">
+            <img src="car3.png" draggable="false">
         </div>
     </div>
 </div>
@@ -95,6 +99,64 @@
     <div style="height: 1000px;"></div>
 
     <script>
+      var loca = 0;
+      var isPressed = false;
+      var translate_X =0;
+      var current = 0;
+      $('.slide-box').on('mousedown',function(e){
+        $('.slide-container').removeClass('slow');
+        $('.slide-container').css('transform',`translateX(${current}vw)`);
+        loca = e.clientX;
+        isPressed = true;
+      });
+      $('.slide-box').on('mousemove',function(e){
+        if(isPressed==true)
+        {
+          translate_X = e.clientX-loca;
+          if(current+translate_X/13<0 && current+translate_X/13>-201)$('.slide-container').css('transform',`translateX(${current+translate_X/13}vw)`)
+        }
+      });
+      $('.slide-box').on('mouseup',function(){
+        isPressed=false;
+        $('.slide-container').addClass('slow');
+        if(translate_X<-650)
+        {
+          move_next();
+      }
+      else if(translate_X>650)
+      {
+        move_prev();
+      }
+        else $('.slide-container').css('transform',`translateX(${current}vw)`);        
+      })
+
+      $('.slide-box').on('touchstart',function(e){
+        $('.slide-container').removeClass('slow');
+        $('.slide-container').css('transform',`translateX(${current}vw)`);
+        loca = e.touches[0].clientX;
+        isPressed = true;
+      });
+      $('.slide-box').on('touchmove',function(e){
+        if(isPressed==true)
+        {
+          translate_X = e.touches[0].clientX-loca;
+          if(current+translate_X/4<0 && current+translate_X/4>-201)$('.slide-container').css('transform',`translateX(${current+translate_X/4}vw)`)
+        }
+      });
+      $('.slide-box').on('touchend',function(){
+        isPressed=false;
+        $('.slide-container').addClass('slow');
+        if(translate_X<-200)
+        {
+          move_next();
+      }
+      else if(translate_X>200)
+      {
+        move_prev();
+      }
+        else $('.slide-container').css('transform',`translateX(${current}vw)`);        
+      })
+
         $('#login_btn').on('click',function(){
           $('.black-bg').addClass('show');
         });
@@ -102,10 +164,9 @@
           if(e.target == document.querySelector('.black-bg'))
           $('.black-bg').removeClass('show');
         })
-        var current = 0;
+        
         $('.previous').on('click',function(){
-            if(current!=0) current +=100;
-            $('.slide-container').css('transform','translateX('+current+'vw)');
+            move_prev();
         })
         $('.slide-1').on('click',function(){
             current=0;
@@ -120,9 +181,20 @@
             $('.slide-container').css('transform','translateX(-200vw)');
         })
         $('.next').on('click',function(){
-            if(current!=-($('.slide-box').length-1)*100) current -=100;
-            $('.slide-container').css('transform','translateX('+current+'vw)');
+           move_next();
         })
+
+        function move_prev()
+        {
+          if(current!=0) current +=100;
+            $('.slide-container').css('transform','translateX('+current+'vw)');
+        }
+
+        function move_next()
+        {
+          if(current!=-($('.slide-box').length-1)*100) current -=100;
+          $('.slide-container').css('transform','translateX('+current+'vw)');
+        }
     </script>
 
     <div class="lorem" style="width: 200px; height:100px;overflow-y:scroll">

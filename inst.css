@@ -10,6 +10,43 @@
     color: black;
 }
 
+.grey{
+    background:lightgrey;
+    height: 2000px;
+    margin-top: 500px;
+}
+
+.image{
+    float: right;
+    width: 400px;
+    position: sticky;
+    top: 100px;
+}
+
+.card-background{
+    height: 3000px;
+    margin-top: 800px;
+    margin-bottom: 1600px;
+}
+
+.card-box img{
+    display: block;
+    margin: auto;
+    max-width: 80%;
+}
+
+.card-box{
+    position: sticky;
+    top: 300px;
+    margin-top: 200px;
+    transition: all 0.2s;
+}
+
+.text{
+    float: left;
+    width: 300px;
+}
+
 
 .black-bg {
     width : 100%;
@@ -41,7 +78,10 @@
 
 .slide-container{
     width: 700vw;
-    transition: all 1s;
+}
+
+.slow{
+    transition: 1s;
 }
 
 .slide-box {
