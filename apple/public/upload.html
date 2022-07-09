@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instagram Clone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="inst.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> 
+</head>
+<body>
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+  <script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAszT7s6lpJoU5aYU_ONdOhEKxRik84NxE",
+        authDomain: "applemarket-73851.firebaseapp.com",
+        projectId: "applemarket-73851",
+        storageBucket: "applemarket-73851.appspot.com",
+        messagingSenderId: "390888643312",
+        appId: "1:390888643312:web:b905fe3b9dcd54c7bc8035"
+      };
+      
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      
+  </script>
+
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+
+  <nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+
+      <a class="navbar-brand" href="/">Instagram</a>
+      <span class="badge bg-dark" id = "badge">Dark 🔄</span>
+      <button class="navbar-toggler" type="button">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+  <div style="height: 100px;"></div>
+
+  <div class="container mt-3">
+    <input type="text" class="form-control mt-2" id="title" placeholder="title">
+    <textarea class="form-control mt-2" id="content">content</textarea>
+    <input type="text" class="form-control mt-2" id="price" placeholder="price">
+    <input class="form-control mt-2" type="file" id="image">
+    <button class="btn btn-danger mt-3" id="send">올리기</button>
+  </div>
+   
+
+  <script>
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+    $('#send').click(function(){
+
+
+      var file = document.querySelector('#image').files[0];
+      var storageRef = storage.ref();
+      var save_dir = storageRef.child('image/'+file.name);
+      var upload = save_dir.put(file);
+
+      upload.on( 'state_changed', 
+    // 변화시 동작하는 함수 
+    null, 
+    //에러시 동작하는 함수
+    (error) => {
+      console.error('실패사유는', error);
+    }, 
+    // 성공시 동작하는 함수
+    () => {
+      upload.snapshot.ref.getDownloadURL().then((url) => {
+        console.log('업로드된 경로는', url);
+        var save_data ={
+        제목: $('#title').val(),
+        내용: $('#content').val(),
+        가격: $('#price').val(),
+        날짜: new Date(),
+        이미지:url,
+        uid:JSON.parse(localStorage.getItem('user')).uid        }
+        db.collection('product').add(save_data).then(()=>{
+          window.location.href = "/index.html"
+      }).catch((err)=>{
+          console.log(err);
+      });
+      });
+    }
+    );
+
+        
+    });
+
+    
+  </script>
+</body>
+</html>

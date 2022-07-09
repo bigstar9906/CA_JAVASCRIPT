@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instagram Clone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="inst.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> 
+</head>
+<body>
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+  <script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAszT7s6lpJoU5aYU_ONdOhEKxRik84NxE",
+        authDomain: "applemarket-73851.firebaseapp.com",
+        projectId: "applemarket-73851",
+        storageBucket: "applemarket-73851.appspot.com",
+        messagingSenderId: "390888643312",
+        appId: "1:390888643312:web:b905fe3b9dcd54c7bc8035"
+      };
+      
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      
+  </script>
+
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+
+  <nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+
+      <a class="navbar-brand" href="/">Instagram</a>
+      <span class="badge bg-dark" id = "badge">Dark 🔄</span>
+      <button class="navbar-toggler" type="button">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+  <div style="height: 100px;"></div>
+
+  <div class="container">
+    상세페이지 
+    
+</div>
+<div style="margin-left:100px;">
+    <button class="btn btn-primary" id="edit">수정</button>
+    <button class="btn btn-outline-secondary" id="chat">채팅</button>
+</div>
+
+  <script>
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    var queryString = new URLSearchParams(window.location.search);
+
+    db.collection('product').doc(queryString.get('id')).get().then((result)=>{
+        var date = new Date(result.data().날짜.seconds*1000 + result.data().날짜.nanoseconds/1000);
+        var seller_name;
+        db.collection('user').doc(result.data().uid).get().then((result_2)=>{
+            seller_name = result_2.data().name;
+            $('.container').append(`<div class="detail-pic my-4" style="background-image: url('${result.data().이미지}');"></div>
+        <div>
+          <h5 class="seller">${seller_name}</h5>
+          <hr>
+          <h5 class="title">${result.data().제목}</h5>
+          <p class="date">${date.getFullYear()}년${date.getMonth()+1}월 ${date.getDate()}일</p>
+          <p class="price">${result.data().가격}원</p>
+        </div>
+        `)
+        });
+        
+    })
+
+    $('#edit').click(function(){
+        window.location.href=`/edit.html?id=${queryString.get('id')}`
+    })
+
+    $('#chat').click(function(){
+        db.collection('product').doc(queryString.get('id')).get().then((result_p)=>{
+            var seller = result_p.data().uid;
+            var user1=seller;
+            var user2 = JSON.parse(localStorage.getItem('user')).uid;
+            var isExist = false;
+            if(user1!=user2)
+            {
+            async function checkExist(){
+                db.collection('chatroom').get().then((snapshot)=>{
+                    snapshot.forEach(function(doc){
+                        if(doc.data().Users.includes(user1)&&doc.data().Users.includes(user2))
+                        {
+                            isExist = true;
+                            console.log(isExist);
+                        }
+                    })
+                    return isExist;
+                })
+            }
+            
+            checkExist().then(()=>{
+                setTimeout(function(){console.log(isExist);
+                    if(!isExist) db.collection('chatroom').add({Start_Time: new Date(), Users:[user1,user2],product:result_p.data().제목});
+                    else window.location.href='/chat.html';},5000);
+                
+            })
+            }
+            
+        })
+    })
+
+    
+    
+  </script>
+</body>
+</html>

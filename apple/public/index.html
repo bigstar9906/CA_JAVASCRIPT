@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instagram Clone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="inst.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> 
+</head>
+<body>
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+  <script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAszT7s6lpJoU5aYU_ONdOhEKxRik84NxE",
+        authDomain: "applemarket-73851.firebaseapp.com",
+        projectId: "applemarket-73851",
+        storageBucket: "applemarket-73851.appspot.com",
+        messagingSenderId: "390888643312",
+        appId: "1:390888643312:web:b905fe3b9dcd54c7bc8035"
+      };
+      
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  
+      
+      <div class="black-bg">
+        <div class="white-bg">
+          <h4>로그인하세요</h4>
+          <form action = "success.html">
+            <div class="my-3">
+              <input type="text" class="form-control" id = "email">
+            </div>
+            <div class="my-3">
+              <input type="password" class="form-control" id = "pass">
+            </div>
+            <button type="button" class="btn btn-primary" id="sub">전송</button>
+            <button type="button" class="btn btn-danger" id="close">닫기</button>
+          </form>
+        </div>
+      </div>
+
+  <nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+
+      <a class="navbar-brand" href="/">Instagram</a>
+      <span class="badge bg-dark" id = "badge">Dark 🔄</span>
+      <button class="navbar-toggler" type="button">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <script>
+
+    $('#close').click(function(){
+      $('.black-bg').removeClass('show');
+    })
+    var click_cnt=0;
+    $('#badge').on('click',function(){
+      click_cnt++;
+      $('body').toggleClass('dark');
+      $('nav').toggleClass('navbar-light bg-light');
+      $('nav').toggleClass('navbar-dark bg-dark');
+      $('#badge').toggleClass('light');
+      if(click_cnt%2==1)
+      {
+        $('#badge').html('Ligth 🔄');
+        $('#badge').removeClass('bg-dark');
+        $('#badge').addClass('bg-light');
+      }
+      else{
+        $('#badge').html('Dark 🔄');
+        $('#badge').addClass('bg-dark');
+        $('#badge').removeClass('bg-light');
+    }
+    })
+    $(window).on('scroll',function(){
+        var scr = $(window).scrollTop();
+        if(scr<101)
+        {
+            $('.navbar-brand').css("font-size",30-scr/10+"px");
+        }
+    })
+  </script>
+    <div style="height: 100px;"></div>
+    <div class = "main-bg">
+    <h4>Shirts on Sale</h4>
+    <button type="button" class="btn btn-danger" id="login_btn">로그인</button>
+    <button class="btn btn-outline-secondary" id="upload">업로드</button>
+    </div>
+    <div style="overflow: hidden;">
+    <div class="slide-container">
+        <div class="slide-box">
+            <img src="car1.png" draggable="false">
+        </div>
+        <div class="slide-box">
+            <img src="car2.png" draggable="false">
+        </div>
+        <div class="slide-box">
+            <img src="car3.png" draggable="false">
+        </div>
+    </div>
+</div>
+    <button class="previous">이전</button>
+    <button class="slide-1">1</button>
+    <button class="slide-2">2</button>
+    <button class="slide-3">3</button>
+    <button class="next">다음</button>
+
+    <script>
+      var loca = 0;
+      var isPressed = false;
+      var translate_X =0;
+      var current = 0;
+      $('.slide-box').on('mousedown',function(e){
+        $('.slide-container').removeClass('slow');
+        $('.slide-container').css('transform',`translateX(${current}vw)`);
+        loca = e.clientX;
+        isPressed = true;
+      });
+      $('.slide-box').on('mousemove',function(e){
+        if(isPressed==true)
+        {
+          translate_X = e.clientX-loca;
+          if(current+translate_X/13<0 && current+translate_X/13>-201)$('.slide-container').css('transform',`translateX(${current+translate_X/13}vw)`)
+        }
+      });
+      $('.slide-box').on('mouseup',function(){
+        isPressed=false;
+        $('.slide-container').addClass('slow');
+        if(translate_X<-650)
+        {
+          move_next();
+      }
+      else if(translate_X>650)
+      {
+        move_prev();
+      }
+        else $('.slide-container').css('transform',`translateX(${current}vw)`);        
+      })
+
+      $('.slide-box').on('touchstart',function(e){
+        $('.slide-container').removeClass('slow');
+        $('.slide-container').css('transform',`translateX(${current}vw)`);
+        loca = e.touches[0].clientX;
+        isPressed = true;
+      });
+      $('.slide-box').on('touchmove',function(e){
+        if(isPressed==true)
+        {
+          translate_X = e.touches[0].clientX-loca;
+          if(current+translate_X/4<0 && current+translate_X/4>-201)$('.slide-container').css('transform',`translateX(${current+translate_X/4}vw)`)
+        }
+      });
+      $('.slide-box').on('touchend',function(){
+        isPressed=false;
+        $('.slide-container').addClass('slow');
+        if(translate_X<-200)
+        {
+          move_next();
+      }
+      else if(translate_X>200)
+      {
+        move_prev();
+      }
+        else $('.slide-container').css('transform',`translateX(${current}vw)`);        
+      })
+
+        $('#login_btn').on('click',function(){
+          //$('.black-bg').addClass('show');
+          window.location.href="/login.html";
+        });
+
+        $('#upload').on('click',function(){
+          window.location.href="/upload.html";
+        })
+        $('.black-bg').on('click',function(e){
+          if(e.target == document.querySelector('.black-bg'))
+          $('.black-bg').removeClass('show');
+        })
+        
+        $('.previous').on('click',function(){
+            move_prev();
+        })
+        $('.slide-1').on('click',function(){
+            current=0;
+            $('.slide-container').css('transform','translateX(0vw)');
+        })
+        $('.slide-2').on('click',function(){
+            current=-100;
+            $('.slide-container').css('transform','translateX(-100vw)');
+        })
+        $('.slide-3').on('click',function(){
+            current=-200;
+            $('.slide-container').css('transform','translateX(-200vw)');
+        })
+        $('.next').on('click',function(){
+           move_next();
+        })
+
+        function move_prev()
+        {
+          if(current!=0) current +=100;
+            $('.slide-container').css('transform','translateX('+current+'vw)');
+        }
+
+        function move_next()
+        {
+          if(current!=-($('.slide-box').length-1)*100) current -=100;
+          $('.slide-container').css('transform','translateX('+current+'vw)');
+        }
+    </script>
+
+    <div class="container mt-3"></div>
+    <script>
+      const db = firebase.firestore();
+
+        db.collection('product').get().then((snapshot)=>{
+          snapshot.forEach((doc)=>{
+            var date = new Date(doc.data().날짜.seconds*1000 + doc.data().날짜.nanoseconds/1000);
+            $('.container').append(` <div class="product">
+              <div class="thumbnail" style="background-image: url(${doc.data().이미지})"></div>
+              <div class="flex-grow-1 p-4">
+                <h5 class="title"><a href="/detail.html?id=${doc.id}">${doc.data().제목}</a></h5>
+                <p class="date">${date.getFullYear()}년${date.getMonth()+1}월 ${date.getDate()}일</p>
+                <p class="price">${doc.data().가격}원</p>
+                <p class="float-end">❤0</p>
+              </div>
+            </div>`)
+          })
+        });
+    </script>
+
+    
+    <div style="height: 1000px;"></div>
+
+    <div id="quiz">
+    <h4>물에 빠지면 누구부터 구할 것인가?</h4>
+    <button>와이프</button>
+    <button>부모님</button>
+    <button>키우던 개</button>
+  </div>
+    <div style="height:300px"></div>
+    <div class="lorem" style="width: 200px; height:100px;overflow-y:scroll">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae voluptas voluptatum minus praesentium fugit debitis at, laborum ipsa itaque placeat sit, excepturi eius. Nostrum perspiciatis, eligendi quae consectetur praesentium exercitationem.
+    </div>
+    <script>
+      document.querySelector('#quiz').addEventListener('click',function(e){
+        switch(e.target.innerHTML)
+        {
+          case '와이프': console.log('사랑꾼'); break;
+          case '부모님': console.log('효자'); break;
+          case '키우던 개': console.log('동물 애호가');break;
+        }
+
+      })
+        var isEnd = 0;
+        $('.lorem').on('scroll',function(){
+           if(document.querySelector('.lorem').scrollTop+document.querySelector('.lorem').clientHeight+10>=document.querySelector('.lorem').scrollHeight&&isEnd==0)
+           {
+            isEnd=1;
+            alert('약관을 모두 읽으셨습니다.')
+           }
+        });
+        
+    </script>
+</body>
+</html>

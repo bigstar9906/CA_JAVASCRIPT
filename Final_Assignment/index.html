@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="main.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src = "http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+</head>
+
+<body class="" style="background-color:whitesmoke;">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+
+    <nav class="navbar navbar-light bg-dark">
+        <nav style="float:left">
+            <div class="container">
+                <span class="navbar-brand" style="color:azure;font-size:30px;">집꾸미기</span>
+                <button class="page page-selected">Home</button>
+                <button class="page">스토어</button>
+                <button class="page">시공견적</button>
+            </div>
+        </nav>
+    </nav>
+    <div style="height: 100px;">
+        <input id="search"  style="margin-top: 10px; margin-left:10px" placeholder="검색어입력" >
+    </div>
+    <div class="container">
+        <div class="row">
+
+        </div>
+    </div>
+
+    
+    
+
+    <script>
+        $('.page').on('click',function(e){
+            $('.page').removeClass('page-selected');
+            $(this).addClass('page-selected');
+        })
+        var product_data;
+        $.get('./store.json').done(function (data) {
+            product_data = data.products;
+            
+            product_data.forEach(function(a){
+                print_Products(a);
+            })
+
+        $('#search').on('input',function(){
+            $('.row').html('');
+            if($('#search').val()=='')
+            {
+            product_data.forEach(function(a){
+                print_Products(a);
+            })
+            set_drag();
+        }
+            
+        })
+
+        });
+      
+        function print_Products(a)
+        {
+            $('.row').append(
+                `<div class="col-sm-4" id="product_card${a.id}" style="background-color: white; width:23%; margin-left:2%" draggable="true">
+                        <img src="${a.photo}" class="w-100" draggable="false">
+                        <h5>${a.title}</h5>
+                        <h7>${a.brand}</h7>
+                        <p>가격 : ${a.price}</p>
+                        <button class="btn btn-dark">담기</button>
+                      </div>`
+            )
+        }
+    </script>
+
+    <div class="container" style="background-color:darkgray; margin-top :30px">
+        <div style="height:5px"></div>
+            <h4 style="margin-top: 10px;">장바구니</h4>
+            <div class="row_1" style="background-color: black; height:400px;display:flex; ">
+
+            </div>
+            <h5 style="margin-top: 10px;">최종가격</h5>
+            <h6 id="final_price">합계 :</h6>
+            <button class="btn btn-dark" style="margin-top: 10px;">구매하기</button>
+        <div style="height: 80px;"></div>
+    </div>
+    <div style="height : 30px"></div>
+
+    <script>
+        function set_drag()
+        {
+        var node;
+        $(document).ready(function(){
+            $('.row_1').on('dragover',function(e){
+                e.preventDefault();
+            });
+            $('.col-sm-4').on({'dragstart':function(e){
+                node = e.target;
+                $(this).css('border','solid 2px Grey');
+            },'dragend':function(e){
+                $(this).css('border','none');
+            }});
+            $('.row_1').on('drop',function(e){
+                
+                var isExist = false;
+                var products = document.querySelectorAll('.product_card');
+                for(let i=0;i<products.length;i++){
+                    if(products[i].querySelector('h5').innerHTML==node.querySelector('h5').innerHTML)
+                    {
+                        products[i].querySelector('input').value = parseInt( products[i].querySelector('input').value) +1;
+                        isExist=true;
+                    } 
+                }
+                if(!isExist)
+                {
+                $('.row_1').append(`<div class="product_card" style="background-color: white; display:block; margin: 0 auto; width:220px;height:auto;">
+                    <img src="${node.querySelector('img').src}" style="width:200px;height:auto;margin-left:10px; margin-top:10px;"  draggable="false">
+                    <h5>${node.querySelector('h5').innerHTML}</h5>
+                    <h7>${node.querySelector('h7').innerHTML}</h7>
+                    <p> ${node.querySelector('p').innerHTML} </p>
+                    <input value="1">
+                  </div>`)
+                }
+                
+                
+                products = document.querySelectorAll('.product_card');
+                var final_price = 0;
+                for(let i=0;i<products.length;i++){
+                    final_price += parseInt( products[i].querySelector('p').innerHTML.split(':')[1])*parseInt(products[i].querySelector('input').value)
+                }
+                $('#final_price').html('합계 : '+final_price);
+                
+                
+            })
+        })
+    }
+    set_drag();
+       
+    </script>
+
+
+</body>
+
+</html>

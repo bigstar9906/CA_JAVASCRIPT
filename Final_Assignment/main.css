@@ -1,0 +1,12 @@
+.page{
+    background:transparent;
+    border: 0;
+    outline: 0;
+    color: grey;
+    font-size: 20px;
+}
+
+.page-selected{
+    color: white;
+    font-size: 25px;
+}

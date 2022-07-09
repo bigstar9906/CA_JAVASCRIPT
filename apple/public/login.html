@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instagram Clone</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="inst.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> 
+</head>
+<body>
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+  <script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAszT7s6lpJoU5aYU_ONdOhEKxRik84NxE",
+        authDomain: "applemarket-73851.firebaseapp.com",
+        projectId: "applemarket-73851",
+        storageBucket: "applemarket-73851.appspot.com",
+        messagingSenderId: "390888643312",
+        appId: "1:390888643312:web:b905fe3b9dcd54c7bc8035"
+      };
+      
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      
+  </script>
+
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+
+  <nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+
+      <a class="navbar-brand" href="/">Instagram</a>
+      <span class="badge bg-dark" id = "badge">Dark 🔄</span>
+      <button class="navbar-toggler" type="button">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+  <div style="height: 100px;"></div>
+
+  <div class="container mt-3">
+    <div class="mb-3">
+      <input type="text" class="form-control" placeholder="name" id="name-new">
+    </div>
+    <div class="mb-3">
+      <input type="email" class="form-control" placeholder="email" id="email-new">
+    </div>
+    <div class="mb-3">
+      <input type="password" class="form-control" placeholder="pw" id="pw-new">
+    </div>
+    <button type="submit" class="btn btn-primary" id="register">가입하기</button>
+ </div>
+
+ <div class="container mt-3">
+    <div class="mb-3">
+      <input type="email" class="form-control" placeholder="email" id="email">
+    </div>
+    <div class="mb-3">
+      <input type="password" class="form-control" placeholder="pw" id="pw">
+    </div>
+    <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
+    <button type="submit" class="btn btn-warning" id="logout">로그아웃하기</button>
+ </div>
+   
+
+  <script>
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    firebase.auth().onAuthStateChanged((user)=>{
+        if(user){
+            localStorage.setItem('user',JSON.stringify(user));
+        }
+    })
+
+    $('#logout').click(function(){
+        localStorage.removeItem('user');
+        firebase.auth().signOut();
+    })
+    
+    $('#login').click(function(){
+        var Email = $('#email').val();
+        var Password = $('#pw').val();
+        firebase.auth().signInWithEmailAndPassword(Email,Password).then((result)=>{
+            console.log(result.user)
+        })
+    })
+
+    $('#register').click(function(){
+        var Email = $('#email-new').val();
+        var Password = $('#pw-new').val();
+        var Name = $('#name-new').val();
+        firebase.auth().createUserWithEmailAndPassword(Email,Password).then((result)=>{
+            db.collection('user').doc(result.user.uid).set({name: Name,email: Email});
+            console.log(result);
+            console.log(result.user)
+            result.user.updateProfile({displayName:$('#name-new').val()})
+        })
+    })
+    
+  </script>
+</body>
+</html>

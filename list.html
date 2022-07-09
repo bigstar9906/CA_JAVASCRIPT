@@ -41,6 +41,7 @@
             </select>
           원 이하 상품 보기</button>
           <button class="btn btn-info" id="cart_page">장바구니</button>
+          <button class="btn btn-info" id="cart_page_reset">장바구니 비우기</button>
         </div>
 
         <form action="cart.html" id="page_shift"></form>
@@ -181,6 +182,10 @@
               }
             }
             })
+
+            $('#cart_page_reset').click(function(){
+              localStorage.clear();
+            })
            
             function set_col_sm(a)
             {
@@ -211,9 +216,7 @@
                   });
                 }
                 }
-            }     
-            
-           
+            }            
             
            
 
