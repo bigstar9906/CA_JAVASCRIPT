@@ -107,7 +107,6 @@
               if(clicked_chatroom!=a.id)
               {
               clicked_chatroom = a.id;
-              $('.chat-content').empty();
               msg_load(clicked_chatroom);
               }
             })
@@ -116,7 +115,8 @@
   })
 
   function msg_load(room_id){
-    db.collection('chatroom').doc(room_id).collection('messages').get().then((result_msg)=>{
+    db.collection('chatroom').doc(room_id).collection('messages').orderBy('date').onSnapshot((result_msg)=>{
+      $('.chat-content').empty();
       result_msg.forEach((a)=>{
         console.log(a.data());
         if(a.data().uid==my_uid){
@@ -143,7 +143,8 @@
       console.log(send_msg);
       console.log(clicked_chatroom);
       db.collection('chatroom').doc(clicked_chatroom).collection('messages').add(send_msg);
-      $('#send').val = '';
+      $('#chat-input').val('');
+      
     })
 
     

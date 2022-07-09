@@ -103,13 +103,9 @@
                     return isExist;
                 })
             }
-            
-            checkExist().then(()=>{
                 setTimeout(function(){console.log(isExist);
-                    if(!isExist) db.collection('chatroom').add({Start_Time: new Date(), Users:[user1,user2],product:result_p.data().제목});
-                    else window.location.href='/chat.html';},5000);
-                
-            })
+                if(!isExist) db.collection('chatroom').add({Start_Time: new Date(), Users:[user1,user2],product:result_p.data().제목});
+                window.location.href='/chat.html';},5000);
             }
             
         })
