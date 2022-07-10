@@ -13,23 +13,20 @@
   <a v-for=" i in menu" :key="i">{{i}}</a>
   </div>
 
-  
+   
 
-  <DiscountBanner></DiscountBanner>
+  <DiscountBanner/>
   
   
   <div>원룸샵</div>
-  <div v-for="room in rooms" :key="room">
-    <img :src="room.image" class="room-img" @click="isDetailOpen=true;clicked_room=room.id">
-    <h4>{{room.title}}</h4>
-    <p>{{room.price}}원</p>
-  </div>
+  <RoomCard :rooms="rooms"></RoomCard>
 </template>
   
 <script>
 
 import rooms_data from './assets/data.js';
 import DiscountBanner from './DiscountBanner.vue';
+import RoomCard from './RoomCard.vue';
 
 export default {
   name: 'App',
@@ -50,11 +47,12 @@ export default {
   },
   components: {
     DiscountBanner : DiscountBanner,
+    RoomCard : RoomCard,
   }
 }
 </script>
 
-<style>
+<style> 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -97,11 +95,6 @@ div {
 .menu a {
   color: white;
   padding: 10px;
-}
-
-.room-img{
-  width: 100%;
-  margin-top: 40px;
 }
 
 .room-img-detail{
