@@ -1,6 +1,6 @@
 <template>
   <div v-for="room in rooms" :key="room">
-    <img :src="room.image" class="room-img">
+    <img :src="room.image" class="room-img" @click="$emit('openModal',room.id)">
     <h4>{{room.title}}</h4>
     <p>{{room.price}}원</p>
   </div>
@@ -11,7 +11,6 @@ export default {
     props:{
         rooms:Array,
     }
-
 }
 </script>
 
