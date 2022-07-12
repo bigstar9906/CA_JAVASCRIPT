@@ -1,33 +1,47 @@
 <template>
- <nav class="navbar navbar-expand-lg bg-light" id="runsta_nav">
-  <div class="container-fluid">
-    <a class="navbar-brand">Learnstagram</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" :class="{'active': step==0}" @click="step=0" aria-current="page">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" :class="{'active': step==1}" @click="step=1">Msg</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" :class="{'active': step==2}" @click="step=2">Post</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" :class="{'active': step==3}" @click="step=3">Notice</a>
-        </li>
-      </ul>
-      <a class="current_user" v-if="login"></a>
-      <a v-if="!login" style="font-size:small; width:50px; cursor: pointer; color:black; text-decoration: none;" @click="step=4" >Log in</a>
+  <nav class="navbar navbar-expand-lg bg-light" id="runsta_nav">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Learnstagram</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav" v-if="login">
+          <li class="nav-item">
+            <a class="nav-link" :class="{ 'active': step == 0 }" @click="step = 0">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" :class="{ 'active': step == 1 }" @click="step = 1">Msg</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" :class="{ 'active': step == 2 }" @click="step = 2">Post</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" :class="{ 'active': step == 3 }" @click="step = 3">Notice</a>
+          </li>
+        </ul>
+        <div class="btn-group" v-if="login">
+          <button type="button" class="btn" id="current_user" data-bs-toggle="dropdown" aria-expanded="false">
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><a class="dropdown-item" href="#">Dark Mode</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" @click="logout">Logout</a></li>
+          </ul>
+        </div>
+        <a v-if="!login" style="font-size:small; width:50px; cursor: pointer; color:black; text-decoration: none; margin-left: 80%;"
+          @click="step = 4">Log in</a>
+      </div>
     </div>
-  </div>
-</nav>
-<div style="height:100px"></div>
+  </nav>
+  <div style="height:100px"></div>
 
-  <LearnContainer @register="step=5" :posts="posts" :step="step"/>
+  <LearnContainer @register="step = 5" @register_done="step = 4"
+    @login_done="login = true; currentuser = $event; step = 0" :posts="posts" :step="step" />
 
   <!-- <div class="footer" >
     <ul class="footer-button-plus">
@@ -41,28 +55,50 @@
 
 import LearnContainer from './components/LearnContainer.vue'
 import Posts from './assets/Posts.js'
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 
 
 export default {
   name: 'App',
-  data(){
-    return{
-      step:0,
-      posts:Posts,
-      login:false,
+  data() {
+    return {
+      step: 0,
+      posts: Posts,
+      login: true,
+      currentuser: '',
+      user_menu: false,
     }
   },
   components: {
-    LearnContainer:LearnContainer,
+    LearnContainer: LearnContainer,
+  },
+  methods:{
+    logout:function(){
+      const auth = getAuth();
+      signOut(auth);
+    }
+  },
+  beforeCreate() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.step=0;
+        this.currentuser = user
+        this.login = true;
+      }
+      else {
+        this.login = false;
+        this.step=4;
+      }
+    })
   }
 }
 </script>
 
 <style>
-
-#runsta_nav{
-  position:fixed;
-  top:0;
+#runsta_nav {
+  position: fixed;
+  top: 0;
   width: 100%;
   max-width: 660px;
 }
@@ -71,7 +107,7 @@ export default {
 body {
   margin: 0;
   line-height: 1.2;
-  box-sizing:initial;
+  box-sizing: initial;
 }
 
 ul {
@@ -79,22 +115,23 @@ ul {
   list-style-type: none;
 }
 
-.navbar-brand{
-  width:60%
+.navbar-brand {
+  width: 60%
 }
 
-.nav-link{
+.nav-link {
   cursor: pointer;
 }
 
-.current_user{
+#current_user {
   background-image: url('./assets/logo.png');
   width: 30px;
   height: 30px;
   background-size: 100%;
   border-radius: 50%;
   border: 1px solid gray;
-  margin-left: 10px;  
+  margin-left: 10px;
+  
 }
 
 

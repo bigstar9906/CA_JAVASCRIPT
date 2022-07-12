@@ -14,9 +14,9 @@
 </template>
 
 <script>
- import db from '../main.js'
+ import {db} from '../main.js'
  import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth'
- import {collection, addDoc} from "firebase/firestore"
+ import {doc, setDoc} from "firebase/firestore"
  export default {
 
     methods:{
@@ -27,18 +27,19 @@
         const auth = getAuth();
         createUserWithEmailAndPassword(auth,Email,Password).then((userCredential)=>{
             const user = userCredential.user;
-            const docRef = addDoc(collection(db, "users"), {
-         first: Name,
-        last: user.uid,
-         born: 1815
-         });
-  console.log("Document written with ID: ", docRef.id);
-
+            setDoc(doc(db,"users",user.uid),{name:Name,email:Email}).then(()=>{
+              this.$emit('register_done');
+            });
         })
         .catch((error)=>{
             const errorCode=error.code;
-            alert(errorCode);            
+            document.querySelector('#email-new').value='';
+            document.querySelector('#pw-new').value='';
+            document.querySelector('#name-new').value='';
+            alert(errorCode);
+                      
         })
+        
        
         }
     }

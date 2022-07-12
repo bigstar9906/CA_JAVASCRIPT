@@ -4,7 +4,7 @@ import App from './App.vue'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {initializeApp} from 'firebase/app'
-import {getFirestore} from 'firebase/firestore/lite'
+import {getFirestore} from 'firebase/firestore'
 
 //import firebase from 'firebase'
 //import "firebase/firestore"
@@ -20,7 +20,7 @@ var firebaseConfig = {
 };
 //
 //// Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
 
