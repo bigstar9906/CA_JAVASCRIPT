@@ -9,7 +9,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav" v-if="login">
           <li class="nav-item">
-            <a class="nav-link" :class="{ 'active': step == 0 }" @click="step = 0">Home</a>
+            <a class="nav-link" :class="{ 'active': step == 0 }" @click="step = 0" href="/">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" :class="{ 'active': step == 1 }" @click="step = 1">Msg</a>
@@ -22,26 +22,35 @@
           </li>
         </ul>
         <div class="btn-group" v-if="login">
-          <button type="button" class="btn" id="current_user" data-bs-toggle="dropdown" aria-expanded="false">
+          <button type="button" class="btn" id="current_user" data-bs-toggle="dropdown" aria-expanded="false"
+            :style="{ backgroundImage: `url(${currentuser.photoURL})` }">
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Profile</a></li>
-            <li><a class="dropdown-item" href="#">Dark Mode</a></li>
+            <li>
+              <h6 style="text-align:center;">{{ currentuser.displayName }}</h6>
+            </li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" @click="logout">Logout</a></li>
+            <li><a class="dropdown-item" :href="'/profile/' + currentuser.uid">Profile</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" @click="logout" href="/">Logout</a></li>
           </ul>
         </div>
-        <a v-if="!login" style="font-size:small; width:50px; cursor: pointer; color:black; text-decoration: none; margin-left: 80%;"
-          @click="step = 4">Log in</a>
+        <a v-if="!login"
+          style="font-size:small; width:50px; cursor: pointer; color:black; text-decoration: none; margin-left: 80%;"
+          @click="step = 4" href="/">Log in</a>
       </div>
     </div>
   </nav>
-  <div style="height:100px"></div>
+  <div style="height:66px"></div>
 
-  <LearnContainer @register="step = 5" @register_done="step = 4"
-    @login_done="login = true; currentuser = $event; step = 0" :posts="posts" :step="step" />
+  <router-view @register="step = 5" @register_done="step = 4" @login_done="login = true; currentuser = $event; step = 0"
+    @upload_done="step = 0" :step="step" :currentuser="currentuser"></router-view>
+
+
 
   <!-- <div class="footer" >
     <ul class="footer-button-plus">
@@ -53,8 +62,6 @@
 
 <script>
 
-import LearnContainer from './components/LearnContainer.vue'
-import Posts from './assets/Posts.js'
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 
 
@@ -63,17 +70,15 @@ export default {
   data() {
     return {
       step: 0,
-      posts: Posts,
       login: true,
       currentuser: '',
       user_menu: false,
     }
   },
   components: {
-    LearnContainer: LearnContainer,
   },
-  methods:{
-    logout:function(){
+  methods: {
+    logout: function () {
       const auth = getAuth();
       signOut(auth);
     }
@@ -82,13 +87,13 @@ export default {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        this.step=0;
+        this.step = 0;
         this.currentuser = user
         this.login = true;
       }
       else {
         this.login = false;
-        this.step=4;
+        this.step = 4;
       }
     })
   }
@@ -124,14 +129,13 @@ ul {
 }
 
 #current_user {
-  background-image: url('./assets/logo.png');
   width: 30px;
   height: 30px;
   background-size: 100%;
   border-radius: 50%;
   border: 1px solid gray;
   margin-left: 10px;
-  
+
 }
 
 

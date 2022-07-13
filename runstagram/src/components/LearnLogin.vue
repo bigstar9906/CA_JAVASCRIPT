@@ -8,23 +8,23 @@
     </div>
     <button type="submit" class="btn btn-primary" id="login" @click="login">로그인하기</button>
     <a style="float: right; cursor: pointer;" @click="$emit('register')">회원가입</a>
- </div>
+  </div>
 </template>
 
 <script>
 
-import {getAuth,signInWithEmailAndPassword, browserSessionPersistence, setPersistence} from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, browserSessionPersistence, setPersistence } from 'firebase/auth';
 export default {
-  methods:{
-    login:function(){
+  methods: {
+    login: function () {
       var email = document.querySelector('#email').value;
       var pw = document.querySelector('#pw').value;
       const auth = getAuth();
       setPersistence(auth, browserSessionPersistence);
-      signInWithEmailAndPassword(auth,email,pw).then((userCredential)=>{
+      signInWithEmailAndPassword(auth, email, pw).then((userCredential) => {
         const user = userCredential.user;
-        this.$emit('login_done',user);
-      }).catch((error)=>{
+        this.$emit('login_done', user);
+      }).catch((error) => {
         alert(error);
       })
     }
@@ -33,5 +33,4 @@ export default {
 </script>
 
 <style>
-
 </style>

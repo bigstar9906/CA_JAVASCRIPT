@@ -12,12 +12,8 @@
     ],
     "rewrites": [
       {
-        "source": "**",
-        "destination": "/404.html"
-      },
-      {
-        "source": "/login",
-        "destination": "/index.html"
+        "source":"**",
+        "destination":"/index.html"
       }
     ]
   },
